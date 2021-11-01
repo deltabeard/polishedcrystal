@@ -196,7 +196,8 @@ Init::
 
 	ldh a, [hCGB]
 	and a
-	call nz, DoubleSpeed
+	;call nz, DoubleSpeed
+	nop
 
 	xor a
 	ldh [rIF], a
