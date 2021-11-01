@@ -15,12 +15,13 @@ _DoFadePalettes::
 
 	; No matter what, we always take up to 31 color fade steps.
 	; Evenly divide DelayFrames in case the fade duration is more.
+	; The delay is halved when running in normal speed.
 	ld a, c
-	cp 32
+	cp 16
 	ld [wPalFadeDelayFrames], a
 	ld [wPalFadeDelay], a
 	jr c, .got_delay
-	ld a, 31
+	ld a, 15
 	ld [wPalFadeDelayFrames], a
 
 .got_delay
