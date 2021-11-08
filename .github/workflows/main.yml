@@ -9,15 +9,24 @@ jobs:
     - name: Set environment variables
       run: echo "SHORT_SHA=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
     - name: Install dependencies
+      run: sudo apt-get install make python gcc git bison
+    - name: Checkout RGBDS
+      uses: actions/checkout@v2
+      with:
+        repository: gbdev/rgbds
+        ref: v0.5.1
+        path: rgbds
+    - name: Install RGBDS
       run: |
-        sudo apt-get install make python gcc git bison
-        git clone -b v0.5.1 --depth=1 https://github.com/gbdev/rgbds
         pushd rgbds
         sudo make install
         popd
+    - name: Checkout Polished Crystal
+      uses: actions/checkout@v2
+      with:
+        path: polishedcrystal
     - name: Build Rangi42/polishedcrystal
       run: |
-        git clone https://github.com/Rangi42/polishedcrystal.git
         pushd polishedcrystal
         mkdir build
         make -j4
