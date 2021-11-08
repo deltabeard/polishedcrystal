@@ -17,17 +17,15 @@ jobs:
         ref: v0.5.1
         path: rgbds
     - name: Install RGBDS
-      run: |
-        pushd rgbds
-        sudo make install
-        popd
+      working-directory: rgbds
+      run: sudo make install
     - name: Checkout Polished Crystal
       uses: actions/checkout@v2
       with:
         path: polishedcrystal
-    - name: Build Rangi42/polishedcrystal
+    - name: Build Polished Crystal
+      working-directory: polishedcrystal
       run: |
-        pushd polishedcrystal
         mkdir build
         make -j4
         mv polishedcrystal-3.0.0-beta.gbc build/polishedcrystal-3.0.0-beta.gbc
@@ -47,9 +45,9 @@ jobs:
         make tidy
         make bsp
         mv polishedcrystal-3.0.0-beta.bsp build/polishedcrystal-savepatch-3.0.0-beta.bsp
-        popd
     - name: Upload build as artifact
       uses: actions/upload-artifact@v2
       with:
         name: build
         path: polishedcrystal/build/
+        if-no-files-found: error
