@@ -31,7 +31,6 @@ jobs:
     - name: Check cache for graphics
       uses: actions/cache@v2
       with:
-        # Cache lz compressed graphics
         path: |
           ./polishedcrystal/**/*.[12]bpp
           ./polishedcrystal/**/*.lz
