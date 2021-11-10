@@ -1,6 +1,6 @@
 name: Nightly build of fork
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -32,8 +32,8 @@ jobs:
       uses: actions/cache@v2
       with:
         # Cache lz compressed graphics
-        path: ./polishedcrystal/**/*.lz
-        key: ${{ runner.os }}-build-${{ hashFiles('gfx_collection.tar') }}
+        path: ./polishedcrystal/**/*.{[12]bpp,lz,*.2bpp.vram[012]}
+        key: ${{ runner.os }}-build-${{ secrets.CACHE_VERSION }}-${{ hashFiles('gfx_collection.tar') }}
     - name: Build Polished Crystal
       working-directory: polishedcrystal
       run: |
