@@ -194,10 +194,12 @@ Init::
 	ld [MBC3LatchClock], a
 	ld [MBC3SRamEnable], a
 
+if DEF(SINGLE_SPEED)
+else
 	ldh a, [hCGB]
 	and a
-	;call nz, DoubleSpeed
-	nop
+	call nz, DoubleSpeed
+endc
 
 	xor a
 	ldh [rIF], a

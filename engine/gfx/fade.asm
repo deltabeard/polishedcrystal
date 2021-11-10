@@ -1,3 +1,9 @@
+if DEF(SINGLE_SPEED)
+def FADE_FRAMES equ 16
+else
+def FADE_FRAMES equ 32
+endc
+
 _DoFadePalettes::
 ; w(BG|OB)Pals: Current palettes
 ; wUnkn(BG|OB)Pals: Palettes we're fading towards
@@ -17,11 +23,11 @@ _DoFadePalettes::
 	; Evenly divide DelayFrames in case the fade duration is more.
 	; The delay is halved when running in normal speed.
 	ld a, c
-	cp 16
+	cp FADE_FRAMES
 	ld [wPalFadeDelayFrames], a
 	ld [wPalFadeDelay], a
 	jr c, .got_delay
-	ld a, 15
+	ld a, FADE_FRAMES-1
 	ld [wPalFadeDelayFrames], a
 
 .got_delay

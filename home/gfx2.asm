@@ -27,6 +27,7 @@ HBlankCopy2bpp::
 .innerLoop
 	pop bc
 	pop de
+
 .waitNoHBlank
 	ldh a, [rSTAT]
 	and 3
@@ -35,22 +36,58 @@ HBlankCopy2bpp::
 	ldh a, [rSTAT]
 	and 3
 	jr nz, .waitHBlank
-; preloads r us
+; Load the first line of sprite into VRAM
 	ld a, c
 	ld [hli], a
 	ld a, b
 	ld [hli], a
+
+if DEF(SINGLE_SPEED)
+; Copy 6 lines during HBlank (6/2 since repeated 2 times)
+	ld c, 3
+
+.waitNoHBlank2
+	ldh a, [rSTAT]
+	and 3
+	jr z, .waitNoHBlank2
+.waitHBlank2
+	ldh a, [rSTAT]
+	and 3
+	jr nz, .waitHBlank2
+
+; Number of repeats must be a common multiple of 6.
+rept 2
+; Copy line
 	ld a, e
 	ld [hli], a
 	ld a, d
 	ld [hli], a
-rept 6
 	pop de
+endr
+
+; Decrement number of lines printed
+	dec c
+; Loop if sprite hasn't finished copying
+	jr nz, .waitNoHBlank2
+else
+
+; No need to check hblank when in doublespeed mode
+rept 6
 	ld a, e
 	ld [hli], a
 	ld a, d
 	ld [hli], a
+	pop de
 endr
+
+endc
+	
+; Copy final line
+	ld a, e
+	ld [hli], a
+	ld a, d
+	ld [hli], a
+
 	ldh a, [hTilesPerCycle]
 	dec a
 	ldh [hTilesPerCycle], a
