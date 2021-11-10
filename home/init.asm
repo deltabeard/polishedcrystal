@@ -194,8 +194,7 @@ Init::
 	ld [MBC3LatchClock], a
 	ld [MBC3SRamEnable], a
 
-if DEF(SINGLE_SPEED)
-else
+if !DEF(SINGLE_SPEED)
 	ldh a, [hCGB]
 	and a
 	call nz, DoubleSpeed
