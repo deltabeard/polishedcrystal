@@ -36,6 +36,12 @@ jobs:
           ./polishedcrystal/**/*.lz
           ./polishedcrystal/**/*.2bpp.vram[012]
         key: ${{ runner.os }}-build-${{ secrets.CACHE_VERSION }}-${{ hashFiles('gfx_collection.tar') }}
+    - name: Update timestamp of cached graphics
+      working-directory: polishedcrystal
+      run: |
+        find . -type f -name "*.2bpp.vram[012]" -exec touch {} +
+        find . -type f -name "*.[12]bpp" -exec touch {} +
+        find . -type f -name "*.lz" -exec touch {} +
     - name: Build Polished Crystal
       working-directory: polishedcrystal
       run: |
