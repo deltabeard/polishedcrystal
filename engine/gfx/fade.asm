@@ -1,8 +1,4 @@
-if DEF(SINGLE_SPEED)
-def FADE_FRAMES equ 16
-else
 def FADE_FRAMES equ 32
-endc
 
 _DoFadePalettes::
 ; w(BG|OB)Pals: Current palettes
@@ -21,9 +17,16 @@ _DoFadePalettes::
 
 	; No matter what, we always take up to 31 color fade steps.
 	; Evenly divide DelayFrames in case the fade duration is more.
-	; The delay is halved when running in normal speed.
 	ld a, c
 	cp FADE_FRAMES
+
+if DEF(SINGLE_SPEED)
+	; Clear carry flag
+	or a, a
+	; Divide number of fade frames by 2 to compensate for single speed.
+	rr a
+endc
+
 	ld [wPalFadeDelayFrames], a
 	ld [wPalFadeDelay], a
 	jr c, .got_delay
