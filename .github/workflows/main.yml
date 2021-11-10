@@ -31,23 +31,27 @@ jobs:
         mv polishedcrystal-3.0.0-beta.gbc build/polishedcrystal-3.0.0-beta.gbc
         mv polishedcrystal-3.0.0-beta.sym build/polishedcrystal-3.0.0-beta.sym
         make tidy
-        make -j4 faithful
-        mv polishedcrystal-3.0.0-beta.gbc build/polishedcrystal-faithful-3.0.0-beta.gbc
-        mv polishedcrystal-3.0.0-beta.sym build/polishedcrystal-faithful-3.0.0-beta.sym
+        make -j4 singlespeed
+        mv polishedcrystal-3.0.0-beta.gbc build/polishedcrystal-singlespeed-3.0.0-beta.gbc
+        mv polishedcrystal-3.0.0-beta.sym build/polishedcrystal-singlespeed-3.0.0-beta.sym
         make tidy
-        make -j4 debug
-        mv polishedcrystal-3.0.0-beta.gbc build/polisheddebug-3.0.0-beta.gbc
-        mv polishedcrystal-3.0.0-beta.sym build/polisheddebug-3.0.0-beta.sym
+        make -j4 singlespeed faithful
+        mv polishedcrystal-3.0.0-beta.gbc build/polishedcrystal-singlespeed-faithful-3.0.0-beta.gbc
+        mv polishedcrystal-3.0.0-beta.sym build/polishedcrystal-singlespeed-faithful-3.0.0-beta.sym
         make tidy
-        make -j4 faithful debug
-        mv polishedcrystal-3.0.0-beta.gbc build/polisheddebug-faithful-3.0.0-beta.gbc
-        mv polishedcrystal-3.0.0-beta.sym build/polisheddebug-faithful-3.0.0-beta.sym
+        make -j4 singlespeed debug
+        mv polishedcrystal-3.0.0-beta.gbc build/polisheddebug-singlespeed-3.0.0-beta.gbc
+        mv polishedcrystal-3.0.0-beta.sym build/polisheddebug-singlespeed-3.0.0-beta.sym
+        make tidy
+        make -j4 singlespeed faithful debug
+        mv polishedcrystal-3.0.0-beta.gbc build/polisheddebug-singlespeed-faithful-3.0.0-beta.gbc
+        mv polishedcrystal-3.0.0-beta.sym build/polisheddebug-singlespeed-faithful-3.0.0-beta.sym
         make tidy
         make bsp
         mv polishedcrystal-3.0.0-beta.bsp build/polishedcrystal-savepatch-3.0.0-beta.bsp
     - name: Upload build as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: build
+        name: Build-Output
         path: polishedcrystal/build/
         if-no-files-found: error
