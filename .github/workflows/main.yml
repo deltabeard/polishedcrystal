@@ -32,7 +32,10 @@ jobs:
       uses: actions/cache@v2
       with:
         # Cache lz compressed graphics
-        path: ./polishedcrystal/**/*.{[12]bpp,lz,*.2bpp.vram[012]}
+        path: |
+          ./polishedcrystal/**/*.[12]bpp
+          ./polishedcrystal/**/*.lz
+          ./polishedcrystal/**/*.2bpp.vram[012]
         key: ${{ runner.os }}-build-${{ secrets.CACHE_VERSION }}-${{ hashFiles('gfx_collection.tar') }}
     - name: Build Polished Crystal
       working-directory: polishedcrystal
