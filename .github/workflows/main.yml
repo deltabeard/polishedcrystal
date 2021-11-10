@@ -23,6 +23,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: polishedcrystal
+    - name: Create hash file for graphcis
+      working-directory: polishedcrystal
+      run: find ./ -name '*.png' -print0 | LC_ALL=C sort -z | tar --null --files-from=- --mtime='2015-10-21 00:00Z' --owner=0 --group=0 --numeric-owner --format=gnu -cf 'gfx_collection.tar'
+    - name: Check cache for graphics
+      uses: actions/cache@v2
+      with:
+        # Cache lz compressed graphics
+        path: ./polishedcrystal/**/*.lz
+        key: ${{ runner.os }}-build-${{ hashFiles('gfx_collection.tar') }}
     - name: Build Polished Crystal
       working-directory: polishedcrystal
       run: |
