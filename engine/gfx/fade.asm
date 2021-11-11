@@ -15,17 +15,17 @@ _DoFadePalettes::
 	ld a, BANK(wBGPals2)
 	ldh [rSVBK], a
 
-	; No matter what, we always take up to 31 color fade steps.
-	; Evenly divide DelayFrames in case the fade duration is more.
-	ld a, c
-	cp FADE_FRAMES
-
 if DEF(SINGLE_SPEED)
 	; Clear carry flag
 	or a, a
 	; Divide number of fade frames by 2 to compensate for single speed.
-	rr a
+	rr c
 endc
+
+	; No matter what, we always take up to 31 color fade steps.
+	; Evenly divide DelayFrames in case the fade duration is more.
+	ld a, c
+	cp FADE_FRAMES
 
 	ld [wPalFadeDelayFrames], a
 	ld [wPalFadeDelay], a
