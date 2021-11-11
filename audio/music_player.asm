@@ -1673,7 +1673,9 @@ MPUpdateUIAndGetJoypad:
 	call UpdateVisualIntensity
 	call DelayFrame
 	call DrawChData
+if !DEF(SINGLE_SPEED)
 	call DrawNotes
+endc
 MPGetJoypad:
 	ld a, [wTextDelayFrames]
 	and a
