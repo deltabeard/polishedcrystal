@@ -65,6 +65,10 @@ LCDMusicPlayer::
 	reti
 
 LCDBillsPC1::
+if DEF(SINGLE_SPEED)
+	reti
+else
+
 	push af
 
 	; Write boxmon palettes
@@ -112,8 +116,13 @@ endr
 .donepc
 	pop af
 	reti
+endc
 
 LCDBillsPC2::
+if DEF(SINGLE_SPEED)
+	reti
+else
+
 	push af
 	push hl
 	push bc
@@ -185,8 +194,13 @@ endr
 	pop hl
 	pop af
 	reti
+endc
 
 LCDBillsPC3:
+if DEF(SINGLE_SPEED)
+	reti
+else
+
 ; Writes white or box background to color0 for BG3
 	push af
 	push hl
@@ -226,6 +240,7 @@ endr
 	pop hl
 	pop af
 	reti
+endc
 
 DisableLCD::
 ; Turn the LCD off

@@ -373,6 +373,16 @@ VRAMToVRAMCopy::
 	ldh a, [c]
 	and b
 	jr nz, .waitHBlank2
+
+if DEF(SINGLE_SPEED)
+rept 4
+	pop de
+	ld a, e
+	ld [hli], a
+	ld a, d
+	ld [hli], a
+endr
+else
 rept 8
 	pop de
 	ld a, e
@@ -380,6 +390,8 @@ rept 8
 	ld a, d
 	ld [hli], a
 endr
+endc
+
 	ld a, l
 	and $f
 	jr nz, .waitNoHBlank2
