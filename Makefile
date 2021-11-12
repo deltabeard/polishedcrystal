@@ -1,5 +1,6 @@
 NAME := polishedcrystal
 VERSION := 3.0.0-beta
+ROM_NAME = $(NAME)-$(VERSION)
 
 TITLE := PKPCRYSTAL
 MCODE := PKPC
@@ -39,26 +40,27 @@ ifeq ($(filter singlespeed,$(MAKECMDGOALS)),singlespeed)
 RGBASM_FLAGS += -DSINGLE_SPEED
 endif
 
-crystal_obj := \
-main.o \
-home.o \
-ram.o \
-audio.o \
-audio/music_player.o \
-data/pokemon/dex_entries.o \
-data/pokemon/egg_moves.o \
-data/pokemon/evos_attacks.o \
-data/maps/map_data.o \
-data/text/common.o \
-data/tilesets.o \
-engine/movie/credits.o \
-engine/overworld/events.o \
-gfx/pics.o \
-gfx/icons.o \
-gfx/sprites.o \
-gfx/items.o \
-gfx/misc.o
+# Compile tools before processing targets
+$(info $(shell $(MAKE) -C tools))
 
+crystal_obj := main.o \
+	       home.o \
+	       ram.o \
+	       audio.o \
+	       audio/music_player.o \
+	       data/pokemon/dex_entries.o \
+	       data/pokemon/egg_moves.o \
+	       data/pokemon/evos_attacks.o \
+	       data/maps/map_data.o \
+	       data/text/common.o \
+	       data/tilesets.o \
+	       engine/movie/credits.o \
+	       engine/overworld/events.o \
+	       gfx/pics.o \
+	       gfx/icons.o \
+	       gfx/sprites.o \
+	       gfx/items.o \
+	       gfx/misc.o
 
 .SUFFIXES:
 .PHONY: clean tidy crystal faithful nortc debug monochrome freespace tools bsp singlespeed
@@ -67,7 +69,6 @@ gfx/misc.o
 .SECONDARY:
 .DEFAULT_GOAL: crystal
 
-crystal: ROM_NAME = $(NAME)-$(VERSION)
 crystal: $(NAME)-$(VERSION).gbc
 
 faithful: crystal
@@ -89,14 +90,12 @@ clean: tidy
 	$(MAKE) clean -C tools/
 
 tidy:
-	rm -f $(crystal_obj) $(wildcard $(NAME)-*.gbc) $(wildcard $(NAME)-*.map) $(wildcard $(NAME)-*.sym) $(wildcard $(NAME)-*.bsp) rgbdscheck.o
+	$(RM) $(crystal_obj) $(NAME)-*.gbc $(NAME)-*.map $(NAME)-*.sym $(NAME)-*.bsp rgbdscheck.o
 
-freespace: ROM_NAME = $(NAME)-$(VERSION)
 freespace: crystal tools/bankends
 	tools/bankends $(ROM_NAME).map > bank_ends.txt
 
 bsp: $(NAME)-$(VERSION).bsp
-
 
 rgbdscheck.o: rgbdscheck.asm
 	$(RGBDS_DIR)rgbasm -o $@ $<
@@ -106,11 +105,10 @@ $1: $2 $$(shell tools/scan_includes $2) | rgbdscheck.o
 	$$(RGBDS_DIR)rgbasm $$(RGBASM_FLAGS) -L -o $$@ $$<
 endef
 
+# Generate dependencies from source files.
 ifeq (,$(filter clean tidy tools,$(MAKECMDGOALS)))
-$(info $(shell $(MAKE) -C tools))
 $(foreach obj, $(crystal_obj), $(eval $(call DEP,$(obj),$(obj:.o=.asm))))
 endif
-
 
 .gbc: tools/bankends
 %.gbc: $(crystal_obj)
